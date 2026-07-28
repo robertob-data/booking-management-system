@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+agenda.db
+.streamlit/secrets.toml
+venv/
+.env
