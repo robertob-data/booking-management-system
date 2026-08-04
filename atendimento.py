@@ -115,6 +115,7 @@ def buscar_atendimento_id(id_atendimento):
     return resultado
 
 def concluir_atendimento(id_atendimento):
+
     conexao = conectar()
     cursor = conexao.cursor()
     
@@ -129,6 +130,14 @@ def concluir_atendimento(id_atendimento):
     return True
 
 def verificar_horario(profissional_id, dh_consulta):
+    '''
+    profissional_id: id do profissional na tabela atendimentos
+    dh_consulta: valor que vem na hora de marcar de fato
+    
+    a funçao realiza uma comparaçao de valores com um intervalo de 60 minutos
+    caso o horario desejado esteja sobreponto este intervalo retorna o valor
+    caso o horario esteja livre retorna none
+    '''
     conexao = conectar()
     cursor = conexao.cursor()
     
