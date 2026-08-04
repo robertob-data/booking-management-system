@@ -1,6 +1,18 @@
 from database import conectar
 
 def gerar_atendimento(nome, idade, dh_marcacao, dh_consulta, procedimento, profissional_id):
+    '''
+    nome: nome do cliente
+    idade: idade do cliente
+    dh_marcacao: data/hora em que o atendimento foi marcado (registro histórico)
+    dh_consulta: data/hora em que o atendimento vai de fato acontecer
+    procedimento: descrição do serviço a ser realizado
+    profissional_id: id do profissional que vai atender
+
+    Insere um novo atendimento no banco, com status ativo (1) por padrão.
+
+    Retorna: nada (None) — apenas salva no banco
+    '''
     conexao = conectar()
     cursor = conexao.cursor()
     
@@ -13,6 +25,14 @@ def gerar_atendimento(nome, idade, dh_marcacao, dh_consulta, procedimento, profi
     
 
 def cancelar_atendimento(id_atendimento):
+    '''
+    id_atendimento: id do atendimento a ser cancelado
+
+    Faz soft delete: muda o status do atendimento para 0 (cancelado),
+    sem apagar o registro do banco.
+
+    Retorna: True se a operação foi executada
+    '''
     conexao = conectar()
     cursor = conexao.cursor()
     
@@ -27,6 +47,14 @@ def cancelar_atendimento(id_atendimento):
     return True
 
 def deletar_atendimento(id_atendimento):
+    '''
+    id_atendimento: id do atendimento a ser removido
+
+    ⚠️ Hard delete — apaga o registro permanentemente do banco, sem volta.
+    Diferente de cancelar_atendimento (soft delete). Usar com cuidado.
+
+    Retorna: True se a operação foi executada
+    '''
     conexao = conectar()
     cursor = conexao.cursor()
     
@@ -42,6 +70,13 @@ def deletar_atendimento(id_atendimento):
 
 
 def listar_todos_atendimentos():
+    '''
+    Busca todos os atendimentos com status 1 (ativos), já cruzando
+    com a tabela profissionais para trazer o nome do profissional.
+
+    Retorna: lista de tuplas (id, nome_profissional, nome_cliente,
+    data_hora_consulta, procedimento, data_hora_marcacao)
+    '''
     conexao = conectar()
     cursor = conexao.cursor()
     
@@ -57,6 +92,13 @@ def listar_todos_atendimentos():
     return resultado
 
 def listar_atendimentos_cancelados():
+    '''
+    Busca todos os atendimentos com status 0 (cancelados), já cruzando
+    com a tabela profissionais para trazer o nome do profissional.
+
+    Retorna: lista de tuplas (nome_profissional, nome_cliente,
+    data_hora_consulta, procedimento)
+    '''
     conexao = conectar()
     cursor = conexao.cursor()
     
@@ -73,6 +115,13 @@ def listar_atendimentos_cancelados():
     
     
 def listar_atendimentos_concluidos():
+    '''
+    Busca todos os atendimentos com status 2 (concluídos), já cruzando
+    com a tabela profissionais para trazer o nome do profissional.
+
+    Retorna: lista de tuplas (nome_profissional, nome_cliente,
+    data_hora_consulta, procedimento)
+    '''
     conexao = conectar()
     cursor = conexao.cursor()
     
@@ -88,6 +137,14 @@ def listar_atendimentos_concluidos():
     return resultado
 
 def listar_atendimentos_por_profissional(id_profissional):
+    '''
+    id_profissional: id do profissional cujos atendimentos serão buscados
+
+    Busca todos os atendimentos vinculados a um profissional específico,
+    sem filtrar por status.
+
+    Retorna: lista de tuplas com todos os campos de atendimentos
+    '''
     conexao = conectar()
     cursor = conexao.cursor()
     
@@ -102,6 +159,13 @@ def listar_atendimentos_por_profissional(id_profissional):
     return resultado
 
 def buscar_atendimento_id(id_atendimento):
+    '''
+    id_atendimento: id do atendimento buscado
+
+    Busca um único atendimento pelo seu id.
+
+    Retorna: uma tupla com todos os campos do atendimento, ou None se não existir
+    '''
     conexao = conectar()
     cursor = conexao.cursor()
     
@@ -115,6 +179,13 @@ def buscar_atendimento_id(id_atendimento):
     return resultado
 
 def concluir_atendimento(id_atendimento):
+    '''
+    id_atendimento: id do atendimento a ser marcado como concluído
+
+    Atualiza o status do atendimento para 2 (concluído).
+
+    Retorna: True se a operação foi executada
+    '''
 
     conexao = conectar()
     cursor = conexao.cursor()
